@@ -19,18 +19,25 @@ class DisconnectStful extends StatefulWidget {
   _DisconnectStfulState createState() => _DisconnectStfulState();
 }
 
+bool _isLoading = false;
+
 class _DisconnectStfulState extends State<DisconnectStful> {
   @override
   Widget build(BuildContext context) {
     return Center(
-      child: ElevatedButton(
-        onPressed: () {
-          http
-              .get(Uri.parse('http://192.168.100.100:222/closeMeet'))
-              .then((value) => Navigator.pop(context));
-        },
-        child: Text('Disconnect'),
-      ),
+      child: _isLoading
+          ? CircularProgressIndicator()
+          : ElevatedButton(
+              onPressed: () {
+                setState(() {
+                  _isLoading = true;
+                });
+                http
+                    .get(Uri.parse('http://192.168.100.100:222/closeMeet'))
+                    .then((value) => Navigator.pop(context));
+              },
+              child: Text('Disconnect'),
+            ),
     );
   }
 }

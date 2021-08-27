@@ -1,0 +1,17 @@
+//TODO:
+delete button now works
+downloads text is now arranged properly
+added toast
+replaced "vokoscreen-"
+added confirm dialog for delete
+added cursors change on whole project
+
+//TODO:
+to add features:
+1. Recently joined meetings
+2. Timed autojoin meetings
+
+
+//TODO:
+known issues:
+1.successfully deleted dialog doesnt close automatically

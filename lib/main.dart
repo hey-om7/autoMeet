@@ -61,33 +61,36 @@ class _AutoMeetState extends State<AutoMeet> {
       children: [
         Align(
           alignment: Alignment.topRight,
-          child: GestureDetector(
-            onTap: () async {
-              print('downloads clicked!');
-              // String _url = "http://192.168.100.100:222/download/video.mkv";
-              // await canLaunch(_url)
-              //     ? await launch(_url)
-              //     : throw 'Could not launch $_url';
-              Navigator.push(
-                context,
-                new MaterialPageRoute(
-                  builder: (context) => Downloads(),
+          child: MouseRegion(
+            cursor: SystemMouseCursors.click,
+            child: GestureDetector(
+              onTap: () async {
+                print('downloads clicked!');
+                // String _url = "http://192.168.100.100:222/download/video.mkv";
+                // await canLaunch(_url)
+                //     ? await launch(_url)
+                //     : throw 'Could not launch $_url';
+                Navigator.push(
+                  context,
+                  new MaterialPageRoute(
+                    builder: (context) => Downloads(),
+                  ),
+                );
+              },
+              child: Container(
+                width: height > width ? height * 0.11 : width * 0.07,
+                height: height > width ? height * 0.11 : width * 0.07,
+                child: Center(
+                  child: Image.asset(
+                    'assets/download.png',
+                    width: height > width ? height * 0.065 : width * 0.04,
+                  ),
                 ),
-              );
-            },
-            child: Container(
-              width: height > width ? height * 0.11 : width * 0.07,
-              height: height > width ? height * 0.11 : width * 0.07,
-              child: Center(
-                child: Image.asset(
-                  'assets/download.png',
-                  width: height > width ? height * 0.065 : width * 0.04,
-                ),
+                decoration: BoxDecoration(
+                    color: Colors.white,
+                    borderRadius:
+                        BorderRadius.only(bottomLeft: Radius.circular(32))),
               ),
-              decoration: BoxDecoration(
-                  color: Colors.white,
-                  borderRadius:
-                      BorderRadius.only(bottomLeft: Radius.circular(32))),
             ),
           ),
         ),
@@ -141,46 +144,49 @@ class _AutoMeetState extends State<AutoMeet> {
                 SizedBox(
                   height: 10,
                 ),
-                GestureDetector(
-                  onTap: () {
-                    print('get started pressed');
-                    http
-                        .get(Uri.parse(
-                            'http://192.168.100.100:222/isMeetingAlive'))
-                        .then((value) {
-                      if (value.body.substring(1, value.body.length - 1) ==
-                          "true") {
-                        Navigator.push(
-                          context,
-                          new MaterialPageRoute(
-                            builder: (context) => Disconnect(),
+                MouseRegion(
+                  cursor: SystemMouseCursors.click,
+                  child: GestureDetector(
+                    onTap: () {
+                      print('get started pressed');
+                      http
+                          .get(Uri.parse(
+                              'http://192.168.100.100:222/isMeetingAlive'))
+                          .then((value) {
+                        if (value.body.substring(1, value.body.length - 1) ==
+                            "true") {
+                          Navigator.push(
+                            context,
+                            new MaterialPageRoute(
+                              builder: (context) => Disconnect(),
+                            ),
+                          );
+                        } else {
+                          Navigator.push(
+                            context,
+                            new MaterialPageRoute(
+                              builder: (context) => JoinMeet(),
+                            ),
+                          );
+                        }
+                      });
+                    },
+                    child: Container(
+                      height: height > width ? height * 0.1 : height * 0.1,
+                      width: height > width ? width * 0.5 : width * 0.2,
+                      child: Center(
+                        child: Text(
+                          'Get Started',
+                          style: TextStyle(
+                            color: Colors.white,
+                            fontSize: height > width ? 23 : 30,
                           ),
-                        );
-                      } else {
-                        Navigator.push(
-                          context,
-                          new MaterialPageRoute(
-                            builder: (context) => JoinMeet(),
-                          ),
-                        );
-                      }
-                    });
-                  },
-                  child: Container(
-                    height: height > width ? height * 0.1 : height * 0.1,
-                    width: height > width ? width * 0.5 : width * 0.2,
-                    child: Center(
-                      child: Text(
-                        'Get Started',
-                        style: TextStyle(
-                          color: Colors.white,
-                          fontSize: height > width ? 23 : 30,
                         ),
                       ),
-                    ),
-                    decoration: BoxDecoration(
-                      color: Color(0xff68CFEC),
-                      borderRadius: BorderRadius.circular(45),
+                      decoration: BoxDecoration(
+                        color: Color(0xff68CFEC),
+                        borderRadius: BorderRadius.circular(45),
+                      ),
                     ),
                   ),
                 )

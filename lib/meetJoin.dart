@@ -1,3 +1,4 @@
+import 'package:awesome_dialog/awesome_dialog.dart';
 import 'package:flutter/material.dart';
 import 'dart:convert';
 import 'package:http/http.dart';
@@ -44,27 +45,31 @@ class _JoinMeetStfulState extends State<JoinMeetStful> {
             children: [
               Align(
                 alignment: Alignment.topLeft,
-                child: GestureDetector(
-                  onTap: () {
-                    print('back button clicked!');
-                    Navigator.pop(context);
-                  },
-                  child: Container(
-                    width: height > width ? height * 0.11 : width * 0.06,
-                    height: height > width ? height * 0.11 : width * 0.06,
-                    child: Center(
-                      child: RotatedBox(
-                        quarterTurns: 2,
-                        child: Image.asset(
-                          'assets/back.png',
-                          width: height > width ? height * 0.045 : width * 0.03,
+                child: MouseRegion(
+                  cursor: SystemMouseCursors.click,
+                  child: GestureDetector(
+                    onTap: () {
+                      print('back button clicked!');
+                      Navigator.pop(context);
+                    },
+                    child: Container(
+                      width: height > width ? height * 0.11 : width * 0.06,
+                      height: height > width ? height * 0.11 : width * 0.06,
+                      child: Center(
+                        child: RotatedBox(
+                          quarterTurns: 2,
+                          child: Image.asset(
+                            'assets/back.png',
+                            width:
+                                height > width ? height * 0.045 : width * 0.03,
+                          ),
                         ),
                       ),
+                      decoration: BoxDecoration(
+                          color: Colors.black,
+                          borderRadius: BorderRadius.only(
+                              bottomRight: Radius.circular(32))),
                     ),
-                    decoration: BoxDecoration(
-                        color: Colors.black,
-                        borderRadius: BorderRadius.only(
-                            bottomRight: Radius.circular(32))),
                   ),
                 ),
               ),
@@ -133,17 +138,20 @@ class _JoinMeetStfulState extends State<JoinMeetStful> {
                                 ),
                               ),
                               Spacer(),
-                              GestureDetector(
-                                onTap: () {
-                                  setState(() {
-                                    recordingButton = !recordingButton;
-                                  });
-                                },
-                                child: Image.asset(
-                                  recordingButton
-                                      ? 'assets/switchOn.png'
-                                      : 'assets/switchOff.png',
-                                  width: 45,
+                              MouseRegion(
+                                cursor: SystemMouseCursors.click,
+                                child: GestureDetector(
+                                  onTap: () {
+                                    setState(() {
+                                      recordingButton = !recordingButton;
+                                    });
+                                  },
+                                  child: Image.asset(
+                                    recordingButton
+                                        ? 'assets/switchOn.png'
+                                        : 'assets/switchOff.png',
+                                    width: 45,
+                                  ),
                                 ),
                               )
                             ],
@@ -160,52 +168,72 @@ class _JoinMeetStfulState extends State<JoinMeetStful> {
                           ],
                         ),
                       ),
-                      GestureDetector(
-                        onTap: () async {
-                          setState(() {
-                            loadingMeet = true;
-                          });
-                          String response = await makePostRequest(
-                              nameText.text,
-                              linkText.text,
-                              platformText.text,
-                              recordingButton);
-                          print("Response==" + response);
-                          if (response.substring(1, response.length - 1) ==
-                              "Received Response") {
-                            Navigator.push(
-                                context,
-                                new MaterialPageRoute(
-                                    builder: (context) => Disconnect()));
-                          }
-                          // print(nameText.text +
-                          //     linkText.text +
-                          //     platformText.text +
-                          //     recordingButton.toString());
-                        },
-                        child: Container(
-                          // margin: EdgeInsets.all(height > width ? 10 : 0),
-                          width: height > width ? width * 0.5 : width * 0.35,
-                          height:
-                              height > width ? height * 0.09 : height * 0.09,
-                          child: Center(
-                            child: Text(
-                              'Join',
-                              style: TextStyle(
-                                fontSize: 24,
-                                color: Colors.white,
+                      MouseRegion(
+                        cursor: SystemMouseCursors.click,
+                        child: GestureDetector(
+                          onTap: () async {
+                            if (nameText.text.isNotEmpty &&
+                                linkText.text.isNotEmpty &&
+                                platformText.text.isNotEmpty) {
+                              setState(() {
+                                loadingMeet = true;
+                              });
+                              String response = await makePostRequest(
+                                  nameText.text,
+                                  linkText.text,
+                                  platformText.text,
+                                  recordingButton);
+                              print("Response==" + response);
+                              if (response.substring(1, response.length - 1) ==
+                                  "Received Response") {
+                                // Navigator.push(
+                                //     context,
+                                //     new MaterialPageRoute(
+                                //         builder: (context) => Disconnect()));
+                                // Navigator.popAndPushNamed(context, "");
+                                Navigator.pushReplacement(
+                                    context,
+                                    new MaterialPageRoute(
+                                        builder: (context) => Disconnect()));
+                              }
+                            } else {
+                              //TODO: toast
+                              AwesomeDialog(
+                                context: context,
+                                dialogType: DialogType.ERROR,
+                                animType: AnimType.TOPSLIDE,
+                                title: 'Please fill all details',
+                                width: mobileDevice ? 400 : 600,
+                                dialogBorderRadius: BorderRadius.circular(30),
+                                // btnCancelOnPress: () {},
+                                btnOkOnPress: () async {},
+                              )..show();
+                            }
+                          },
+                          child: Container(
+                            // margin: EdgeInsets.all(height > width ? 10 : 0),
+                            width: height > width ? width * 0.5 : width * 0.35,
+                            height:
+                                height > width ? height * 0.09 : height * 0.09,
+                            child: Center(
+                              child: Text(
+                                'Join',
+                                style: TextStyle(
+                                  fontSize: 24,
+                                  color: Colors.white,
+                                ),
                               ),
                             ),
-                          ),
-                          decoration: BoxDecoration(
-                            borderRadius: BorderRadius.circular(20),
-                            color: Color(0xffFFB774),
-                            boxShadow: [
-                              BoxShadow(
-                                  blurRadius: 30,
-                                  spreadRadius: 0,
-                                  color: Colors.black.withOpacity(0.02))
-                            ],
+                            decoration: BoxDecoration(
+                              borderRadius: BorderRadius.circular(20),
+                              color: Color(0xffFFB774),
+                              boxShadow: [
+                                BoxShadow(
+                                    blurRadius: 30,
+                                    spreadRadius: 0,
+                                    color: Colors.black.withOpacity(0.02))
+                              ],
+                            ),
                           ),
                         ),
                       ),
